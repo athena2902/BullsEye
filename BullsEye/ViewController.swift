@@ -10,12 +10,13 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    var currentValue :Int = 0;
+    var currentValue: Int = 0
+    var targetValue: Int = 0
     @IBOutlet weak var slider: UISlider!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        currentValue = lroundf(slider.value)
+        self.startNewRound()
     }
 
     override func didReceiveMemoryWarning() {
@@ -26,12 +27,14 @@ class ViewController: UIViewController {
 
     @IBAction func showAlert() {
         let message = "The value of slider is: \(currentValue)"
+            + "\nThe target value is: \(targetValue)"
         let alert = UIAlertController(title: "Hello world", message: message, preferredStyle: .alert)
         
         let action = UIAlertAction(title: "OK", style: .default, handler: nil)
         
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
+        self.startNewRound()
     }
     
     
@@ -39,5 +42,12 @@ class ViewController: UIViewController {
         currentValue = lroundf(slider.value)
         print(currentValue)
     }
+    
+    func startNewRound() {
+        targetValue = 1 + Int(arc4random_uniform(100))
+        currentValue = 50
+        slider.value = Float(currentValue)
+    }
+    
 }
 
