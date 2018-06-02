@@ -22,7 +22,7 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.startNewRound()
+        self.startNewGame()
     }
 
     override func didReceiveMemoryWarning() {
@@ -33,17 +33,30 @@ class ViewController: UIViewController {
 
     @IBAction func showAlert() {
         let difference = abs(targetValue - currentValue)
-        let points = 100 - difference
+        var points = 100 - difference
+        
+        let title: String
+        if difference == 0 {
+            title = "Perfect!"
+            points += 100
+        } else if difference < 5 {
+            title = "You almost had it!"
+        } else if difference < 10 {
+            title = "Pretty good!"
+        } else {
+            title = "Not even close."
+        }
         score += points
         
         let message = "You scored \(points) points"
-        let alert = UIAlertController(title: "Hello world", message: message, preferredStyle: .alert)
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         
-        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+        let action = UIAlertAction(title: "OK", style: .default, handler: { action in
+            self.startNewRound()
+        })
         
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
-        self.startNewRound()
     }
     
     
@@ -56,7 +69,13 @@ class ViewController: UIViewController {
         targetValue = 1 + Int(arc4random_uniform(100))
         currentValue = 50
         slider.value = Float(currentValue)
-        updateLabels()
+        self.updateLabels()
+    }
+    
+    @IBAction func startNewGame() {
+        round = 0
+        score = 0
+        self.startNewRound()
     }
     
     func updateLabels() {
